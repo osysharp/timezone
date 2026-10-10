@@ -1,0 +1,41 @@
+namespace ClockKitTests;
+
+using Osysharp.Identity;
+using Osysharp.TimeZone;
+
+// A BAKERY: the owner decides where its day starts, the bakers work by it. Stockholm until the owner says otherwise.
+
+[Role] enum BakeryRole { Authenticator, Baker, Owner }
+
+policy IsOwner => RoleGrant.Any(g => g.Member == user && g.Role == BakeryRole.Owner);
+/// The kit's one question: who moves the clock.
+policy ManagesClock => IsOwner;
+
+/// Somebody who works at the bakery.
+entity Person : Principal {
+  security {
+    allow read when IsAuthenticated || IsAuthenticator;
+    allow create when IsAuthenticator;
+  }
+}
+
+app.Clock = new ClockSetup { TimeZone = Zone.Of("Europe/Stockholm") };
+
+/// The bakery's front page: the day on its own wall.
+[Title("Crumb & Co")]
+[Route("/")]
+[Authorize]
+[Render(CSR)]
+component Home() {
+  DateOnly? today = null;
+  on mount { today = TodayAtTheBakery(); }
+  render {
+    Stack(gap: 3, p: 5, w: "100%", maxW: "640px", mx: "auto") {
+      PageHead("Today at the bakery");
+      if (today != null) { Text($"{today.Value:dddd d MMMM}"); }
+    }
+  }
+}
+
+/// The date on the bakery's wall now.
+public DateOnly TodayAtTheBakery() { return TheClock().DayOf(DateTime.UtcNow); }

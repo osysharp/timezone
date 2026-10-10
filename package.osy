@@ -1,0 +1,19 @@
+// Osysharp.TimeZone — the app's clock: the time zone its days start in and the day its week starts, one setting staff pick
+// from a list. Every kit that counts in days — reports bucketing by day and week, a digest mailed each morning, a
+// period called "this week" — reads it here, so a team that moves its clock moves all of them at once.
+//
+//     use Osysharp.TimeZone@0;
+//     policy ManagesClock => IsLead;      // who moves the clock — REQUIRED unless the app defines `IsAdmin` (the default)
+//     app.Clock = new ClockSetup { TimeZone = Zone.Of("Europe/Stockholm") };   // optional: the clock until staff choose
+//
+//     var clock = TheClock();
+//     var today = clock.DayOf(DateTime.UtcNow);                                   // the date on the team's wall
+package Osysharp.TimeZone {
+  version "0.1.3";
+  minPlatform "0.9.0";
+  summary     "the app's clock — the time zone its days start in and the day its week starts, picked by staff from the app's declared zones on one settings page and read by every kit that counts in days.";
+  model "model/*.osy";
+  // The settings page, and the zone picker on it.
+  use Osysharp.Ui;
+  tests "tests";
+}

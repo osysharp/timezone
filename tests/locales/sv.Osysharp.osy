@@ -1,0 +1,126 @@
+// sv (Svenska): the words of ClockKitTests · Osysharp, translated.
+// Written and kept in step with the source by `osy translate`: a new text arrives as `=> null`, a text
+// whose source changed keeps its old translation in a `was` clause. The words are yours to edit.
+// Source language: en.
+
+translations sv {
+  // ── Osysharp · Osysharp.ActionOutcome ──
+  /// Osysharp.ActionOutcome · a label (a field, a list item, a menu entry) · at most ~10 characters
+  /// shown through Osysharp.ActionOutcome.Done
+  /// beside: "Refused", "Not allowed", "Gone", "Failed"
+  label "Done" => null;
+  /// Osysharp.ActionOutcome · a label (a field, a list item, a menu entry) · at most ~12 characters
+  /// shown through Osysharp.ActionOutcome.Failed
+  /// beside: "Done", "Refused", "Not allowed", "Gone"
+  label "Failed" => null;
+  /// Osysharp.ActionOutcome · a label (a field, a list item, a menu entry) · at most ~10 characters
+  /// shown through Osysharp.ActionOutcome.Gone
+  /// beside: "Done", "Refused", "Not allowed", "Failed"
+  label "Gone" => null;
+  /// Osysharp.ActionOutcome · a label (a field, a list item, a menu entry) · at most ~17 characters
+  /// shown through Osysharp.ActionOutcome.Denied
+  /// beside: "Done", "Refused", "Gone", "Failed"
+  label "Not allowed" => null;
+  /// Osysharp.ActionOutcome · a label (a field, a list item, a menu entry) · at most ~13 characters
+  /// shown through Osysharp.ActionOutcome.Invalid
+  /// beside: "Done", "Not allowed", "Gone", "Failed"
+  label "Refused" => null;
+
+  // ── Osysharp · Osysharp.ActionParameterKind ──
+  /// Osysharp.ActionParameterKind · a label (a field, a list item, a menu entry) · at most ~12 characters
+  /// shown through Osysharp.ActionParameterKind.Choice
+  /// beside: "Text", "Number", "Decimal", "Yes or no", "Date", "Date and time"
+  label "Choice" => null;
+  /// Osysharp.ActionParameterKind · a label (a field, a list item, a menu entry) · at most ~10 characters
+  /// shown through Osysharp.ActionParameterKind.Date
+  /// beside: "Text", "Number", "Decimal", "Yes or no", "Date and time", "Time of day"
+  label "Date" => null;
+  /// Osysharp.ActionParameterKind · a label (a field, a list item, a menu entry) · at most ~19 characters
+  /// shown through Osysharp.ActionParameterKind.DateAndTime
+  /// beside: "Text", "Number", "Decimal", "Yes or no", "Date", "Time of day"
+  label "Date and time" => null;
+  /// Osysharp.ActionParameterKind · a label (a field, a list item, a menu entry) · at most ~13 characters
+  /// shown through Osysharp.ActionParameterKind.Decimal
+  /// beside: "Text", "Number", "Yes or no", "Date", "Date and time", "Time of day"
+  label "Decimal" => null;
+  /// Osysharp.ActionParameterKind · a label (a field, a list item, a menu entry) · at most ~14 characters
+  /// shown through Osysharp.ActionParameterKind.Duration
+  /// beside: "Text", "Number", "Decimal", "Yes or no", "Date", "Date and time"
+  label "Duration" => null;
+  /// Osysharp.ActionParameterKind · a label (a field, a list item, a menu entry) · at most ~8 characters
+  /// shown through Osysharp.ActionParameterKind.Id
+  /// beside: "Text", "Number", "Decimal", "Yes or no", "Date", "Date and time"
+  label "Id" => null;
+  /// Osysharp.ActionParameterKind · a label (a field, a list item, a menu entry) · at most ~12 characters
+  /// shown through Osysharp.ActionParameterKind.Number
+  /// beside: "Text", "Decimal", "Yes or no", "Date", "Date and time", "Time of day"
+  label "Number" => null;
+  /// Osysharp.ActionParameterKind · a label (a field, a list item, a menu entry) · at most ~12 characters
+  /// shown through Osysharp.ActionParameterKind.Record
+  /// beside: "Text", "Number", "Decimal", "Yes or no", "Date", "Date and time"
+  label "Record" => null;
+  /// Osysharp.ActionParameterKind · a label (a field, a list item, a menu entry) · at most ~10 characters
+  /// shown through Osysharp.ActionParameterKind.Text
+  /// beside: "Number", "Decimal", "Yes or no", "Date", "Date and time", "Time of day"
+  label "Text" => null;
+  /// Osysharp.ActionParameterKind · a label (a field, a list item, a menu entry) · at most ~17 characters
+  /// shown through Osysharp.ActionParameterKind.TimeOfDay
+  /// beside: "Text", "Number", "Decimal", "Yes or no", "Date", "Date and time"
+  label "Time of day" => null;
+  /// Osysharp.ActionParameterKind · a label (a field, a list item, a menu entry) · at most ~15 characters
+  /// shown through Osysharp.ActionParameterKind.YesNo
+  /// beside: "Text", "Number", "Decimal", "Date", "Date and time", "Time of day"
+  label "Yes or no" => null;
+
+  // ── Osysharp · Osysharp.DayOfWeek ──
+  /// Osysharp.DayOfWeek · a label (a field, a list item, a menu entry) · at most ~12 characters
+  /// shown through Osysharp.DayOfWeek.Friday
+  /// beside: "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Saturday"
+  label "Friday" => null;
+  /// Osysharp.DayOfWeek · a label (a field, a list item, a menu entry) · at most ~12 characters
+  /// shown through Osysharp.DayOfWeek.Monday
+  /// beside: "Sunday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+  label "Monday" => "måndag";
+  /// Osysharp.DayOfWeek · a label (a field, a list item, a menu entry) · at most ~14 characters
+  /// shown through Osysharp.DayOfWeek.Saturday
+  /// beside: "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
+  label "Saturday" => null;
+  /// Osysharp.DayOfWeek · a label (a field, a list item, a menu entry) · at most ~12 characters
+  /// shown through Osysharp.DayOfWeek.Sunday
+  /// beside: "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+  label "Sunday" => null;
+  /// Osysharp.DayOfWeek · a label (a field, a list item, a menu entry) · at most ~14 characters
+  /// shown through Osysharp.DayOfWeek.Thursday
+  /// beside: "Sunday", "Monday", "Tuesday", "Wednesday", "Friday", "Saturday"
+  label "Thursday" => null;
+  /// Osysharp.DayOfWeek · a label (a field, a list item, a menu entry) · at most ~13 characters
+  /// shown through Osysharp.DayOfWeek.Tuesday
+  /// beside: "Sunday", "Monday", "Wednesday", "Thursday", "Friday", "Saturday"
+  label "Tuesday" => null;
+  /// Osysharp.DayOfWeek · a label (a field, a list item, a menu entry) · at most ~15 characters
+  /// shown through Osysharp.DayOfWeek.Wednesday
+  /// beside: "Sunday", "Monday", "Tuesday", "Thursday", "Friday", "Saturday"
+  label "Wednesday" => null;
+
+  // ── Osysharp · Osysharp.Personal ──
+  /// Osysharp.Personal · a label (a field, a list item, a menu entry) · at most ~21 characters
+  /// shown through Osysharp.Personal.Contact
+  /// beside: "Identity", "Financial", "Content", "Special category"
+  label "Contact details" => null;
+  /// Osysharp.Personal · a label (a field, a list item, a menu entry) · at most ~13 characters
+  /// shown through Osysharp.Personal.Content
+  /// beside: "Contact details", "Identity", "Financial", "Special category"
+  label "Content" => null;
+  /// Osysharp.Personal · a label (a field, a list item, a menu entry) · at most ~15 characters
+  /// shown through Osysharp.Personal.Financial
+  /// beside: "Contact details", "Identity", "Content", "Special category"
+  label "Financial" => null;
+  /// Osysharp.Personal · a label (a field, a list item, a menu entry) · at most ~14 characters
+  /// shown through Osysharp.Personal.Identity
+  /// beside: "Contact details", "Financial", "Content", "Special category"
+  label "Identity" => null;
+  /// Osysharp.Personal · a label (a field, a list item, a menu entry) · at most ~23 characters
+  /// shown through Osysharp.Personal.Special
+  /// beside: "Contact details", "Identity", "Financial", "Content"
+  label "Special category" => null;
+}

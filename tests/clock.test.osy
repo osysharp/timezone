@@ -1,0 +1,102 @@
+// THE APP'S CLOCK — what it says before anybody sets it, what a day and a week are on it, who may move it, and the
+// settings page it is moved on, driven as the owner would, wide and on a phone, light and dark (`osy test --pixels`).
+using Osysharp.Identity;
+using Osysharp.TimeZone;
+using ClockKitTests;
+
+[TestFixture]
+void Bakery() {
+  var olle = new Person { Email = "olle@crumb.test", DisplayName = "Olle Berg" };
+  new RoleGrant { Member = olle, Role = BakeryRole.Owner };
+  var mia = new Person { Email = "mia@crumb.test", DisplayName = "Mia Holm" };
+  new RoleGrant { Member = mia, Role = BakeryRole.Baker };
+}
+
+principal Olle => Person.Single(p => p.Email == "olle@crumb.test");
+principal Mia => Person.Single(p => p.Email == "mia@crumb.test");
+
+[Test(Bakery)]
+void before_anybody_sets_it_the_clock_is_the_apps_own() {
+  runas (Mia) {
+    var clock = TheClock();
+    Assert.Equal(Zone.Of("Europe/Stockholm"), clock.TimeZone);
+    Assert.Equal(DayOfWeek.Monday, clock.WeekStart);
+  }
+}
+
+[Test(Bakery)]
+void a_day_starts_at_midnight_on_the_teams_wall_and_follows_summer_time() {
+  runas (Mia) {
+    var clock = TheClock();
+    // 23:30 UTC on 28 March is already 00:30 on the 29th in Stockholm — the night summer time begins.
+    Assert.Equal(new DateOnly(2026, 3, 29), clock.DayOf(new DateTime(2026, 3, 28, 23, 30, 0)));
+    // Midnight in winter is 23:00 UTC the day before; in summer, 22:00.
+    Assert.Equal(new DateTime(2026, 1, 14, 23, 0, 0), clock.StartOf(new DateOnly(2026, 1, 15)));
+    Assert.Equal(new DateTime(2026, 7, 14, 22, 0, 0), clock.StartOf(new DateOnly(2026, 7, 15)));
+    // A week starts on Monday: Thursday 16 July 2026 is in the week of Monday 13 July.
+    Assert.Equal(new DateOnly(2026, 7, 13), clock.WeekOf(new DateOnly(2026, 7, 16)));
+  }
+}
+
+[Test(Bakery)]
+void the_owner_moves_the_clock_and_every_reader_follows() {
+  runas (Olle) {
+    var row = new ClockSettings { TimeZone = Zone.Of("America/New_York"), WeekStart = DayOfWeek.Sunday };
+    UnitOfWork.Commit();
+  }
+  runas (Mia) {
+    var clock = TheClock();
+    Assert.Equal(Zone.Of("America/New_York"), clock.TimeZone);
+    // 03:00 UTC on 15 July is still the evening of the 14th in New York…
+    Assert.Equal(new DateOnly(2026, 7, 14), clock.DayOf(new DateTime(2026, 7, 15, 3, 0, 0)));
+    // …and a week that starts on Sunday puts Thursday 16 July in the week of Sunday 12 July.
+    Assert.Equal(new DateOnly(2026, 7, 12), clock.WeekOf(new DateOnly(2026, 7, 16)));
+  }
+}
+
+[Test(Bakery)]
+void a_baker_reads_the_clock_and_cannot_move_it() {
+  runas (Olle) { new ClockSettings(); UnitOfWork.Commit(); }
+  runas (Mia) {
+    var row = ClockSettings.Single();
+    Assert.Equal(Zone.Of("UTC"), row.TimeZone);
+    Assert.Throws(() => { row.TimeZone = Zone.Of("Asia/Tokyo"); UnitOfWork.Commit(); });
+  }
+  runas (Olle) { Assert.Equal(Zone.Of("UTC"), ClockSettings.Single().TimeZone); }
+}
+
+[Test(Bakery)]
+void the_owner_picks_the_time_zone_from_a_list_on_the_settings_page() {
+  Ui.Viewport(1440, 900);
+  Ui.SignInAs(Olle);
+  Ui.Visit("/settings/clock");
+  Assert.Visible("Time zone");
+  Assert.Visible("Weeks start on");
+  Ui.Shot("settings-wide-light");
+  Ui.Click("Time zone");
+  Assert.Visible("Tokyo — Asia");
+  Assert.Visible("Los Angeles — America");
+  Ui.Shot("picker-open-wide-light");
+  Ui.Select("Time zone", Zone.Of("Asia/Tokyo"));
+  Ui.Click("Save");
+  Assert.Visible("Time and date saved.");
+  runas (Olle) { Assert.Equal(Zone.Of("Asia/Tokyo"), ClockSettings.Single().TimeZone); }
+  Ui.Theme("dark");
+  Ui.Shot("settings-wide-dark");
+  Ui.Viewport(390, 844);
+  Ui.Shot("settings-phone-dark");
+  Ui.Theme("light");
+  Ui.Shot("settings-phone-light");
+}
+
+/// The day a week starts on is a word a person reads — in Swedish, "måndag" (tests/locales/sv.Osysharp.osy). A day is a
+/// CORE enum, in no unit an app's compile reads, so this proves its translation still reaches the page.
+[Test(Bakery)]
+void the_day_a_week_starts_on_reads_in_the_language_the_app_is_read_in() {
+  runas (Mia) {
+    var start = TheClock().WeekStart;
+    Assert.Equal("Monday", start.Label);
+    Session.SetLanguage("sv");
+    Assert.Equal("måndag", start.Label);
+  }
+}

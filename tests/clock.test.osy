@@ -19,7 +19,7 @@ principal Mia => Person.Single(p => p.Email == "mia@crumb.test");
 void before_anybody_sets_it_the_clock_is_the_apps_own() {
   runas (Mia) {
     var clock = TheClock();
-    Assert.Equal(Zone.Of("Europe/Stockholm"), clock.TimeZone);
+    Assert.Equal(TimeZoneInfo.FindSystemTimeZoneById("Europe/Stockholm"), clock.TimeZone);
     Assert.Equal(DayOfWeek.Monday, clock.WeekStart);
   }
 }
@@ -41,12 +41,12 @@ void a_day_starts_at_midnight_on_the_teams_wall_and_follows_summer_time() {
 [Test(Bakery)]
 void the_owner_moves_the_clock_and_every_reader_follows() {
   runas (Olle) {
-    var row = new ClockSettings { TimeZone = Zone.Of("America/New_York"), WeekStart = DayOfWeek.Sunday };
+    var row = new ClockSettings { TimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/New_York"), WeekStart = DayOfWeek.Sunday };
     UnitOfWork.Commit();
   }
   runas (Mia) {
     var clock = TheClock();
-    Assert.Equal(Zone.Of("America/New_York"), clock.TimeZone);
+    Assert.Equal(TimeZoneInfo.FindSystemTimeZoneById("America/New_York"), clock.TimeZone);
     // 03:00 UTC on 15 July is still the evening of the 14th in New York…
     Assert.Equal(new DateOnly(2026, 7, 14), clock.DayOf(new DateTime(2026, 7, 15, 3, 0, 0)));
     // …and a week that starts on Sunday puts Thursday 16 July in the week of Sunday 12 July.
@@ -59,10 +59,10 @@ void a_baker_reads_the_clock_and_cannot_move_it() {
   runas (Olle) { new ClockSettings(); UnitOfWork.Commit(); }
   runas (Mia) {
     var row = ClockSettings.Single();
-    Assert.Equal(Zone.Of("UTC"), row.TimeZone);
-    Assert.Throws(() => { row.TimeZone = Zone.Of("Asia/Tokyo"); UnitOfWork.Commit(); });
+    Assert.Equal(TimeZoneInfo.FindSystemTimeZoneById("UTC"), row.TimeZone);
+    Assert.Throws(() => { row.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Asia/Tokyo"); UnitOfWork.Commit(); });
   }
-  runas (Olle) { Assert.Equal(Zone.Of("UTC"), ClockSettings.Single().TimeZone); }
+  runas (Olle) { Assert.Equal(TimeZoneInfo.FindSystemTimeZoneById("UTC"), ClockSettings.Single().TimeZone); }
 }
 
 [Test(Bakery)]
@@ -77,10 +77,10 @@ void the_owner_picks_the_time_zone_from_a_list_on_the_settings_page() {
   Assert.Visible("Tokyo — Asia");
   Assert.Visible("Los Angeles — America");
   Ui.Shot("picker-open-wide-light");
-  Ui.Select("Time zone", Zone.Of("Asia/Tokyo"));
+  Ui.Select("Time zone", TimeZoneInfo.FindSystemTimeZoneById("Asia/Tokyo"));
   Ui.Click("Save");
   Assert.Visible("Time and date saved.");
-  runas (Olle) { Assert.Equal(Zone.Of("Asia/Tokyo"), ClockSettings.Single().TimeZone); }
+  runas (Olle) { Assert.Equal(TimeZoneInfo.FindSystemTimeZoneById("Asia/Tokyo"), ClockSettings.Single().TimeZone); }
   Ui.Theme("dark");
   Ui.Shot("settings-wide-dark");
   Ui.Viewport(390, 844);

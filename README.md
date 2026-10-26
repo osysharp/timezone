@@ -11,7 +11,7 @@ winter.
 use Osysharp.TimeZone@0;
 
 policy ManagesClock => IsLead;                                         // required unless your app defines IsAdmin (its default)
-app.Clock = new ClockSetup { TimeZone = Zone.Of("Europe/Stockholm") };  // optional: the clock until staff pick one
+app.Clock = new ClockSetup { TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Stockholm") };  // optional: the clock until staff pick one
 
 var clock = TheClock();
 var today = clock.DayOf(DateTime.UtcNow);          // the date on the team's wall

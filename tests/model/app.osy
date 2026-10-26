@@ -19,7 +19,7 @@ entity Person : Principal {
   }
 }
 
-app.Clock = new ClockSetup { TimeZone = Zone.Of("Europe/Stockholm") };
+app.Clock = new ClockSetup { TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Stockholm") };
 
 /// The bakery's front page: the day on its own wall.
 [Title("Crumb & Co")]

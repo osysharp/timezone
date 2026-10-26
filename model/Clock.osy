@@ -6,12 +6,12 @@ namespace Osysharp.TimeZone;
 /// `policy ManagesClock => RoleGrant.Any(g => g.Member == user && g.Role == AppRole.Lead);`
 virtual policy ManagesClock => IsAdmin;
 
-/// The clock until staff choose one — `app.Clock = new ClockSetup { TimeZone = Zone.Of("Europe/Stockholm") };`. Without
+/// The clock until staff choose one — `app.Clock = new ClockSetup { TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Stockholm") };`. Without
 /// it, UTC and Monday.
 [AppSetting("Clock")]
 public class ClockSetup {
   /// The time zone days start in until staff pick one. Must be one of the app's declared zones.
-  public Zone TimeZone = Zone.Of("UTC");
+  public TimeZoneInfo TimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
   /// The first day of a week until staff pick one.
   public DayOfWeek WeekStart = DayOfWeek.Monday;
 }
@@ -27,7 +27,7 @@ public class ClockSetup {
 [SettingsGroup("Clock", "Where the team's day starts and ends, and the first day of a week.")]
 public entity ClockSettings {
   [Setting("Time zone", Group = "Clock", Hint = "Days, weeks and months start at midnight here.")]
-  Zone TimeZone = Zone.Of("UTC");
+  TimeZoneInfo TimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
   [Setting("Weeks start on", Group = "Clock", Hint = "Monday in most of Europe; Sunday or Saturday elsewhere.")]
   DayOfWeek WeekStart = DayOfWeek.Monday;
 
@@ -42,17 +42,17 @@ public entity ClockSettings {
 
 /// The clock in force: the zone days start in and the day a week starts.
 public class AppClock {
-  public Zone TimeZone = Zone.Of("UTC");
+  public TimeZoneInfo TimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
   public DayOfWeek WeekStart = DayOfWeek.Monday;
 
   /// The time on the team's wall at `instant` — what a person in the team's zone reads off their clock.
-  public DateTime Local(DateTime instant) { return instant.InZone(TimeZone); }
+  public DateTime Local(DateTime instant) { return TimeZoneInfo.ConvertTimeFromUtc(instant, TimeZone); }
 
   /// The date on the team's wall at `instant`.
-  public DateOnly DayOf(DateTime instant) { return DateOnly.FromDateTime(instant.InZone(TimeZone)); }
+  public DateOnly DayOf(DateTime instant) { return DateOnly.FromDateTime(TimeZoneInfo.ConvertTimeFromUtc(instant, TimeZone)); }
 
   /// The instant `day` begins on the team's wall — its midnight, in summer time or not.
-  public DateTime StartOf(DateOnly day) { return TimeZone.Resolve(day, new TimeOnly(0, 0)); }
+  public DateTime StartOf(DateOnly day) { return TimeZoneInfo.ConvertTimeToUtc(day.ToDateTime(new TimeOnly(0, 0)), TimeZone); }
 
   /// The first day of the week that holds `day`.
   public DateOnly WeekOf(DateOnly day) {

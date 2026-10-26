@@ -9,7 +9,7 @@
 //     var clock = TheClock();
 //     var today = clock.DayOf(DateTime.UtcNow);                                   // the date on the team's wall
 package Osysharp.TimeZone {
-  version "0.3.0";
+  version "0.4.0";
   minPlatform "0.17.0";
   summary     "the app's clock — the time zone its days start in and the day its week starts, picked by staff from the app's declared zones on one settings page and read by every kit that counts in days.";
   model "model/*.osy";
